@@ -1,6 +1,6 @@
 {
-  "version": "2025/10/12-r1",
+  "version": "2026/01/27-test",
   "version_number": 2026012811,
-  "changelog": "Update Terdeteksi: 2025.10.12-Ginkgo-KSUNext.SUSFS-SM6125-23.0-324.zip",
-  "download_url": "https://github.com/TheSillyOk/kernel_workflows/releases/download/2025/10/12-r1/2025.10.12-Ginkgo-KSUNext.SUSFS-SM6125-23.0-324.zip"
+  "changelog": "Update Terdeteksi (Inc. Pre-release): 2026.01.27-Ginkgo-KSUNext.SUSFS-SM6125-23.0-483.zip",
+  "download_url": "https://github.com/TheSillyOk/kernel_workflows/releases/download/2026/01/27-test/2026.01.27-Ginkgo-KSUNext.SUSFS-SM6125-23.0-483.zip"
 }
