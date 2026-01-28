@@ -1,7 +1,7 @@
 name: Kernel Update Sentinel
 on:
   schedule:
-    - cron: '0 */3 * * *' # Memeriksa setiap 3 jam
+    - cron: '0 */3 * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,36 +14,37 @@ jobs:
       - name: Analyze Remote Release
         run: |
           REPO="TheSillyOk/kernel_workflows"
-          # KOREKSI: Mengambil daftar rilis umum agar Pre-release terdeteksi
           API_URL="https://api.github.com/repos/$REPO/releases"
-          # Mengambil index [0] karena rilis terbaru (termasuk pre-release) selalu di paling atas
           RELEASE_DATA=$(curl -s $API_URL | jq '.[0]')
 
-          # Logika Filter: Tetap fokus pada Ginkgo, KSUNext, dan SUSFS
           FILTER_LOGIC='.assets[] | select(.name | contains("Ginkgo") and contains("KSUNext") and contains("SUSFS"))'
           
           DOWNLOAD_URL=$(echo "$RELEASE_DATA" | jq -r "$FILTER_LOGIC | .browser_download_url" | head -n 1)
           FILE_NAME=$(echo "$RELEASE_DATA" | jq -r "$FILTER_LOGIC | .name" | head -n 1)
           TAG_NAME=$(echo "$RELEASE_DATA" | jq -r ".tag_name")
+          # Mengambil tanggal rilis untuk standar FKM
+          PUB_DATE=$(echo "$RELEASE_DATA" | jq -r ".published_at" | cut -d'T' -f1)
 
-          # Validasi keberadaan file
           if [ "$DOWNLOAD_URL" == "null" ] || [ -z "$DOWNLOAD_URL" ]; then
-            echo "Kesalahan: Varian KSUNext-SUSFS tidak ditemukan pada rilis terbaru (termasuk Pre-release)."
+            echo "Kesalahan: Varian tidak ditemukan."
             exit 1
           fi
 
-          # Membuat update.json untuk FKM
+          # KOREKSI: Format JSON wajib mengikuti struktur 'kernel' agar valid di FKM
           echo "{
-            \"version\": \"$TAG_NAME\",
-            \"version_number\": $(date +%Y%m%d%H),
-            \"changelog\": \"Update Terdeteksi (Inc. Pre-release): $FILE_NAME\",
-            \"download_url\": \"$DOWNLOAD_URL\"
+            \"kernel\": {
+              \"name\": \"Ginkgo-KSUNext-SUSFS\",
+              \"version\": \"$TAG_NAME\",
+              \"link\": \"$DOWNLOAD_URL\",
+              \"changelog_url\": \"https://github.com/$REPO/releases/tag/$TAG_NAME\",
+              \"date\": \"$PUB_DATE\"
+            }
           }" > update.json
 
       - name: Deploy Manifest
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "alice.synthesis@integrity.knight"
+          git config --local user.name "Alice Synthesis Thirty"
           git add update.json
-          git commit -m "Sentinel: Sync SUSFS-KSUNext (Support Pre-release)" || exit 0
+          git commit -m "Sentinel: Update manifest to FKM schema v1" || exit 0
           git push
