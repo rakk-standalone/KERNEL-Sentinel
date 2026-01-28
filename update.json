@@ -1,9 +1,9 @@
 {
   "kernel": {
     "name": "Ginkgo-KSUNext-SUSFS",
-    "version": "2026/01/27-test",
-    "link": "https://github.com/TheSillyOk/kernel_workflows/releases/download/2026/01/27-test/2026.01.27-Ginkgo-KSUNext.SUSFS-SM6125-23.0-483.zip",
-    "changelog_url": "https://github.com/TheSillyOk/kernel_workflows/releases/tag/2026/01/27-test",
-    "date": "2026-01-27"
+    "version": "2026/01/28-test",
+    "link": "https://github.com/TheSillyOk/kernel_workflows/releases/download/2026/01/28-test/2026.01.28-Ginkgo-KSUNext.SUSFS-SM6125-23.0-484.zip",
+    "changelog_url": "https://github.com/TheSillyOk/kernel_workflows/releases/tag/2026/01/28-test",
+    "date": "2026-01-28"
   }
 }
